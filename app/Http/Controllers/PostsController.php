@@ -73,7 +73,6 @@ class PostsController extends Controller
     {
 
         // return $request;
-        // التحقق من صحة البيانات
         $this->validate($request, [
             'title' => 'required',
             'body' => 'required',
@@ -82,7 +81,6 @@ class PostsController extends Controller
         try {
             $post = Posts::findOrFail($id);
 
-            // تحديث الـ post مباشرة باستخدام الكائن الممرر في الـ route
             $post->update([
                 'title' => $request->title,
                 'body' => $request->body,
@@ -90,7 +88,6 @@ class PostsController extends Controller
 
             return redirect()->route('posts.index')->with('success', 'Post updated successfully');
         } catch (\Throwable $th) {
-            // التعامل مع أي خطأ غير متوقع
             return redirect()->back()->withErrors($th->getMessage());
         }
     }
