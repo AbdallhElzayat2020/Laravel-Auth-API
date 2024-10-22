@@ -10,9 +10,26 @@ use Illuminate\Support\Facades\Validator;
 
 class PostController extends Controller
 {
-    use ApiResponseTrait;
 
-    // ... (الدوال الأخرى تبقى كما هي)
+    use ApiResponseTrait;
+    public function index()
+    {
+        $posts = Posts::all();
+
+        $posts = PostResource::collection($posts);
+
+        return $this->apiResponse($posts, 'success', 200);
+    }
+    public function show($id)
+    {
+        $post = Posts::find($id);
+
+        if ($post) {
+
+            return $this->apiResponse(new PostResource(Posts::find($id)), 'success', 200);
+        }
+        return $this->apiResponse(null, ' Data Not  found', 404);
+    }
 
     public function store(Request $request)
     {
@@ -36,6 +53,8 @@ class PostController extends Controller
         return $this->apiResponse(null, 'فشل في إنشاء المنشور', 400);
     }
 
+
+
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
@@ -58,5 +77,15 @@ class PostController extends Controller
         $post->update($validator->validated());
 
         return $this->apiResponse(new PostResource($post), 'تم تحديث المنشور بنجاح', 200);
+    }
+
+    public function destory($id)
+    {
+        $post = Posts::find($id);
+        if (!$post) {
+            return $this->apiResponse(null, 'المنشور غير موجود', 404);
+        }
+        $post->delete($id);
+        return $this->apiResponse(null, 'تم حذف المنشور بنجاح', 200);
     }
 }
