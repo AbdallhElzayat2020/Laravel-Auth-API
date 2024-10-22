@@ -29,11 +29,11 @@ class PostController extends Controller
     }
     public function show($id)
     {
-        $post = new PostResource(Posts::find($id));
+        $post = Posts::find($id);
 
         if ($post) {
 
-            return $this->apiResponse($post, 'success', 200);
+            return $this->apiResponse(new PostResource(Posts::find($id)), 'success', 200);
         }
         return $this->apiResponse(null, 'No data found', 404);
 
