@@ -11,10 +11,9 @@ trait ApiResponseTrait
 
     public function apiResponse($data = null, $message = null, $status = null)
     {
-
         return response()->json([
-            'message' => $message,
             'data' => $data,
+            'message' => $message,
             'status' => $status,
         ]);
     }

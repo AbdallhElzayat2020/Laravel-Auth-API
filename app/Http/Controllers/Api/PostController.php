@@ -10,52 +10,53 @@ use Illuminate\Support\Facades\Validator;
 
 class PostController extends Controller
 {
-
     use ApiResponseTrait;
-    public function index()
-    {
-        // $posts = Posts::all();
 
-        // $array = [
-        //     'data' => $posts,
-        //     'message' => 'success',
-        //     'status' => 200,
-        // ];
-
-        // return response()->json($array);
-        $posts = Posts::all();
-
-        $posts = PostResource::collection($posts);
-
-        return $this->apiResponse($posts, 'success', 200);
-    }
-    public function show($id)
-    {
-        $post = Posts::find($id);
-
-        if ($post) {
-
-            return $this->apiResponse(new PostResource(Posts::find($id)), 'success', 200);
-        }
-        return $this->apiResponse(null, ' Data Not  found', 404);
-    }
+    // ... (الدوال الأخرى تبقى كما هي)
 
     public function store(Request $request)
     {
-        $validate = Validator::make($request->all(), [
-            'title' => 'required',
-            'body' => 'required',
+        $validator = Validator::make($request->all(), [
+            'title' => 'required|string|max:255',
+            'body' => 'required|string',
+        ], [
+            'title.required' => 'العنوان مطلوب',
+            'title.string' => 'العنوان يجب أن يكون نصًا',
+            'title.max' => 'العنوان يجب ألا يتجاوز 255 حرفًا',
+            'body.required' => 'المحتوى مطلوب',
+            'body.string' => 'المحتوى يجب أن يكون نصًا',
         ]);
-        if ($validate->fails()) {
-            return $this->apiResponse(null, $validate->errors(), 400);
+        if ($validator->fails()) {
+            return $this->apiResponse(null, $validator->errors(), 400);
         }
-        $post = Posts::create([
-            'title' => $request->title,
-            'body' => $request->body
-        ]);
+        $post = Posts::create($validator->validated());
         if ($post) {
-            return $this->apiResponse(new PostResource($post), 'Post created successfully', 201);
+            return $this->apiResponse(new PostResource($post), 'تم إنشاء المنشور بنجاح', 201);
         }
-        return $this->apiResponse(null, 'Failed to create Post', 400);
+        return $this->apiResponse(null, 'فشل في إنشاء المنشور', 400);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $validator = Validator::make($request->all(), [
+            'title' => 'string|max:255',
+            'body' => 'string',
+        ], [
+            'title.required' => 'العنوان مطلوب',
+            'title.string' => 'العنوان يجب أن يكون نصًا',
+            'title.max' => 'العنوان يجب ألا يتجاوز 255 حرفًا',
+            'body.required' => 'المحتوى مطلوب',
+            'body.string' => 'المحتوى يجب أن يكون نصًا',
+        ]);
+        if ($validator->fails()) {
+            return $this->apiResponse(null, $validator->errors(), 400);
+        }
+        $post = Posts::find($id);
+        if (!$post) {
+            return $this->apiResponse(null, 'المنشور غير موجود', 404);
+        }
+        $post->update($validator->validated());
+
+        return $this->apiResponse(new PostResource($post), 'تم تحديث المنشور بنجاح', 200);
     }
 }
