@@ -19,6 +19,6 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // });
 
-Route::get('posts', [PostController::class, 'index'])->name('posts');
+Route::get('posts', [PostController::class, 'index']);
 
-
+Route::get('post/{id}', [PostController::class, 'show']);

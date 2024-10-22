@@ -23,4 +23,14 @@ class PostController extends Controller
 
         return $this->apiResponse($posts, 'success', 200);
     }
+    public function show($id)
+    {
+        $post = Posts::find($id);
+        if ($post) {
+
+            return $this->apiResponse($post, 'success', 200);
+        }
+        return $this->apiResponse(null, 'No data found', 404);
+
+    }
 }
