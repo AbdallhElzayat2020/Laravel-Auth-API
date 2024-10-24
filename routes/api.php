@@ -47,8 +47,7 @@ Route::post('posts/delete/{id}', [PostController::class, 'destory']);
 
 Route::get('users', [TodoController::class, 'index']);
 
-
-Route::controller(AuthController::class)->group(function () {
+Route::controller(AuthController::class)->middleware('jwt.verify')->group(function () {
     Route::post('login', 'login');
     Route::post('register', 'register');
     Route::post('logout', 'logout');
@@ -56,7 +55,7 @@ Route::controller(AuthController::class)->group(function () {
 
 });
 
-Route::controller(TodoController::class)->group(function () {
+Route::controller(TodoController::class)->middleware('jwt.verify')->group(function () {
     Route::get('todos', 'index');
     Route::post('todo', 'store');
     Route::get('todo/{id}', 'show');
