@@ -14,6 +14,7 @@ class AuthController extends Controller
     {
         $this->middleware('auth:api', ['except' => ['login', 'register']]);
     }
+
     public function login(Request $request)
     {
         $request->validate([
@@ -57,7 +58,6 @@ class AuthController extends Controller
         ]);
 
         $token = Auth::login($user);
-
         return response()->json([
             'status' => 'success',
             'message' => 'User created successfully',
@@ -68,6 +68,7 @@ class AuthController extends Controller
             ]
         ]);
     }
+
     public function logout()
     {
         Auth::logout();
@@ -76,6 +77,7 @@ class AuthController extends Controller
             'message' => 'Successfully logged out',
         ]);
     }
+
     public function refresh()
     {
         return response()->json([
@@ -87,5 +89,4 @@ class AuthController extends Controller
             ]
         ]);
     }
-
 }

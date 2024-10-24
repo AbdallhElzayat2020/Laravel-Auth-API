@@ -1,8 +1,9 @@
 <?php
 
+use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\PostController;
 use App\Http\Controllers\Api\ProjectsController;
-use Illuminate\Http\Request;
+use App\Http\Controllers\Api\TodoController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -26,7 +27,7 @@ use Illuminate\Support\Facades\Route;
 // full api method
 Route::apiResource('projects', ProjectsController::class);
 
-Route::apiResource('test',ProjectsController::class);
+Route::apiResource('test', ProjectsController::class);
 
 
 
@@ -42,3 +43,23 @@ Route::post('posts/create', [PostController::class, 'store']);
 Route::post('posts/update/{id}', [PostController::class, 'update']);
 
 Route::post('posts/delete/{id}', [PostController::class, 'destory']);
+
+
+Route::get('users', [TodoController::class, 'index']);
+
+
+Route::controller(AuthController::class)->group(function () {
+    Route::post('login', 'login');
+    Route::post('register', 'register');
+    Route::post('logout', 'logout');
+    Route::post('refresh', 'refresh');
+
+});
+
+Route::controller(TodoController::class)->group(function () {
+    Route::get('todos', 'index');
+    Route::post('todo', 'store');
+    Route::get('todo/{id}', 'show');
+    Route::put('todo/{id}', 'update');
+    Route::delete('todo/{id}', 'destroy');
+});
