@@ -53,8 +53,6 @@ class PostController extends Controller
         return $this->apiResponse(null, 'فشل في إنشاء المنشور', 400);
     }
 
-
-
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
@@ -85,7 +83,7 @@ class PostController extends Controller
         if (!$post) {
             return $this->apiResponse(null, 'المنشور غير موجود', 404);
         }
-        $post->delete($id);
+        $post->delete();
         return $this->apiResponse(null, 'تم حذف المنشور بنجاح', 200);
     }
 }

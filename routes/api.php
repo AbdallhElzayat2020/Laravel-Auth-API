@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\PostController;
+use App\Http\Controllers\Api\ProjectsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -19,6 +20,19 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // });
 
+// Route::get('projects', [ProjectsController::class, 'index']);
+
+
+// full api method
+Route::apiResource('projects', ProjectsController::class);
+
+Route::apiResource('test',ProjectsController::class);
+
+
+
+
+
+// Posts Crud
 Route::get('posts', [PostController::class, 'index']);
 
 Route::get('post/{id}', [PostController::class, 'show']);
@@ -26,4 +40,5 @@ Route::get('post/{id}', [PostController::class, 'show']);
 Route::post('posts/create', [PostController::class, 'store']);
 
 Route::post('posts/update/{id}', [PostController::class, 'update']);
+
 Route::post('posts/delete/{id}', [PostController::class, 'destory']);
