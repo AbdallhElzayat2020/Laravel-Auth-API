@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\AuthTokenController;
 use App\Http\Controllers\Api\PostController;
 use App\Http\Controllers\Api\ProjectsController;
 use App\Http\Controllers\Api\TodoController;
@@ -47,18 +48,29 @@ Route::post('posts/delete/{id}', [PostController::class, 'destory']);
 
 Route::get('users', [TodoController::class, 'index']);
 
-Route::controller(AuthController::class)->middleware('jwt.verify')->group(function () {
-    Route::post('login', 'login');
-    Route::post('register', 'register');
-    Route::post('logout', 'logout');
-    Route::post('refresh', 'refresh');
 
-});
+// Auth Use JWT
+// Route::controller(AuthController::class)->middleware('jwt.verify')->group(function () {
+//     Route::post('login', 'login');
+//     Route::post('register', 'register');
+//     Route::post('logout', 'logout');
+//     Route::post('refresh', 'refresh');
 
-Route::controller(TodoController::class)->middleware('jwt.verify')->group(function () {
-    Route::get('todos', 'index');
-    Route::post('todo', 'store');
-    Route::get('todo/{id}', 'show');
-    Route::put('todo/{id}', 'update');
-    Route::delete('todo/{id}', 'destroy');
-});
+// });
+
+// Route::controller(TodoController::class)->middleware('jwt.verify')->group(function () {
+//     Route::get('todos', 'index');
+//     Route::post('todo', 'store');
+//     Route::get('todo/{id}', 'show');
+//     Route::put('todo/{id}', 'update');
+//     Route::delete('todo/{id}', 'destroy');
+// });
+
+
+
+
+// Auth With Sanctum
+
+Route::post('auth/tokens', [AuthTokenController::class, 'store']);
+
+Route::post('/auth/logout', [AuthTokenController::class, 'logout']);
